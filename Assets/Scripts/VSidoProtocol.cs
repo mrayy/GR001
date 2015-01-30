@@ -118,8 +118,48 @@ using System.IO;
 
             byte[] send_buf = gen_cmd((byte)'o',data_bytes);//opは'o'
            return send_buf;
-        }
+	}
 
+	public struct JointAnglePair
+	{
+		public byte id;
+		public short angle;
+	}
+	public byte[] gen_cmd_set_objects(JointAnglePair[] pairs)
+	{
+		if (pairs.Length == 0)
+						return null;
+		byte[] data_bytes = new byte[1+3*pairs.Length];
+		//            byte[] converted_angle = conv_angle(900);
+		
+		data_bytes[0] =2;//cycle
+		for(int i=0;i<pairs.Length;i++)
+		{
+			byte[] converted_angle = conv_angle(pairs[i].angle);
+			data_bytes[3*i+1] =pairs[i].id;//id
+			data_bytes[3*i+2] = converted_angle[0];//angle_data_low
+			data_bytes[3*i+3] = converted_angle[1];//angle_data_high
+		}
+		//必要時応じて繰り返し
+		
+		
+		byte[] send_buf = gen_cmd((byte)'o',data_bytes);//opは'o'
+		return send_buf;
+	}
+
+	//Request the value of certain joint
+	public byte[] gen_cmd_get_object(byte id)
+	{
+		byte[] data_bytes = new byte[4];
+		
+		data_bytes[0] =id;//id
+		
+		//必要時応じて繰り返し
+		
+		
+		byte[] send_buf = gen_cmd((byte)'o',data_bytes);//opは'o'
+		return send_buf;
+	}
 
         public byte[] gen_cmd_get_IK(byte id)
         {

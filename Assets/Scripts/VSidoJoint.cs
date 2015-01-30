@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-using PropertyEnabledInspector;
+
 
 [Serializable]
 public class VSidoJoint: MonoBehaviour {
